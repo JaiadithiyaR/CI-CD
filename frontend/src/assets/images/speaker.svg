@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" role="img" aria-label="Bluetooth speaker illustration">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#854d0e"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" rx="36" fill="url(#bg)"/>
+  <circle cx="118" cy="92" r="52" fill="rgba(255,255,255,0.08)"/>
+  <circle cx="492" cy="292" r="92" fill="rgba(255,255,255,0.06)"/>
+  <rect x="220" y="84" width="160" height="232" rx="30" fill="#111827"/>
+  <rect x="236" y="102" width="128" height="80" rx="20" fill="#1f2937"/>
+  <circle cx="300" cy="142" r="26" fill="#fde68a"/>
+  <circle cx="300" cy="222" r="42" fill="#0f766e"/>
+  <circle cx="300" cy="222" r="18" fill="#ecfeff"/>
+  <rect x="270" y="270" width="60" height="10" rx="5" fill="#94a3b8"/>
+</svg>

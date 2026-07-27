@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "name": "Laptop Pro 14",
+    "category": "Electronics",
+    "price": 1200,
+    "description": "High performance laptop for productivity, development, and on-the-go collaboration.",
+    "image": "laptop.svg",
+    "rating": 4.8,
+    "stock": "In Stock"
+  },
+  {
+    "id": 2,
+    "name": "Smartphone X1",
+    "category": "Electronics",
+    "price": 899,
+    "description": "Fast, sleek smartphone with a vibrant display, strong battery life, and modern cameras.",
+    "image": "smartphone.svg",
+    "rating": 4.7,
+    "stock": "In Stock"
+  },
+  {
+    "id": 3,
+    "name": "Studio Headphones",
+    "category": "Audio",
+    "price": 249,
+    "description": "Comfortable wireless headphones with immersive sound and active noise cancellation.",
+    "image": "headphones.svg",
+    "rating": 4.9,
+    "stock": "Low Stock"
+  },
+  {
+    "id": 4,
+    "name": "Smart Watch Active",
+    "category": "Wearables",
+    "price": 199,
+    "description": "Track your health, notifications, workouts, and daily activity in style.",
+    "image": "smartwatch.svg",
+    "rating": 4.6,
+    "stock": "In Stock"
+  },
+  {
+    "id": 5,
+    "name": "Gaming Mouse Ultra",
+    "category": "Accessories",
+    "price": 79,
+    "description": "Precision gaming mouse designed for speed, accuracy, and long sessions.",
+    "image": "mouse.svg",
+    "rating": 4.5,
+    "stock": "In Stock"
+  },
+  {
+    "id": 6,
+    "name": "Mechanical Keyboard TKL",
+    "category": "Accessories",
+    "price": 159,
+    "description": "Responsive mechanical keyboard with a premium typing feel and quiet switches.",
+    "image": "keyboard.svg",
+    "rating": 4.8,
+    "stock": "In Stock"
+  },
+  {
+    "id": 7,
+    "name": "Tablet Air 11",
+    "category": "Electronics",
+    "price": 699,
+    "description": "Lightweight tablet for reading, sketching, meetings, and entertainment.",
+    "image": "tablet.svg",
+    "rating": 4.7,
+    "stock": "Preorder"
+  },
+  {
+    "id": 8,
+    "name": "Bluetooth Speaker Core",
+    "category": "Audio",
+    "price": 129,
+    "description": "Portable Bluetooth speaker with rich bass, clear vocals, and all-day playback.",
+    "image": "speaker.svg",
+    "rating": 4.6,
+    "stock": "In Stock"
+  }
+]

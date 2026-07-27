@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" role="img" aria-label="Headphones illustration">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1d4ed8"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" rx="36" fill="url(#bg)"/>
+  <circle cx="500" cy="88" r="64" fill="rgba(255,255,255,0.08)"/>
+  <circle cx="112" cy="290" r="90" fill="rgba(255,255,255,0.07)"/>
+  <path d="M185 208c0-71 52-128 115-128s115 57 115 128" fill="none" stroke="#e2e8f0" stroke-width="24" stroke-linecap="round"/>
+  <rect x="160" y="198" width="52" height="104" rx="26" fill="#0f172a"/>
+  <rect x="388" y="198" width="52" height="104" rx="26" fill="#0f172a"/>
+  <rect x="170" y="208" width="32" height="84" rx="16" fill="#cbd5e1"/>
+  <rect x="398" y="208" width="32" height="84" rx="16" fill="#cbd5e1"/>
+  <path d="M238 106c36-30 88-30 124 0" fill="none" stroke="#93c5fd" stroke-width="16" stroke-linecap="round"/>
+</svg>
