@@ -36,6 +36,16 @@ pipeline {
                 }
             }
         }
+        stage('Grant Execute Permission') {
+            steps {
+                 sh '''
+                chmod +x detect-active.sh
+                chmod +x deploy-blue.sh
+                chmod +x deploy-green.sh
+                chmod +x switch.sh
+        '''
+              }
+        }
 
         stage('Detect Active Environment') {
             steps {
