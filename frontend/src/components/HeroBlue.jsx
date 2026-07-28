@@ -1,56 +1,59 @@
-import Button from './Button';
-import Badge from './Badge';
+import Button from "./Button";
+import Badge from "./Badge";
 
-function Hero() {
+function HeroBlue() {
   return (
     <section className="hero-card">
       <div className="hero-content">
         <Badge tone="soft" className="eyebrow">
           Milestone 1
         </Badge>
+
         <Badge
-  style={{
-    backgroundColor: "#2563eb",
-    color: "white",
-    marginBottom: "12px",
-    display: "inline-block",
-  }}
->
-  🔵 BLUE ENVIRONMENT
-</Badge>
-<Badge
-  style={{
-    backgroundColor: "#16a34a",
-    color: "white",
-    marginBottom: "12px",
-    display: "inline-block",
-  }}
->
-  🟢 GREEN ENVIRONMENT
-</Badge>
+          style={{
+            backgroundColor: "#2563eb",
+            color: "white",
+            marginBottom: "12px",
+            display: "inline-block",
+          }}
+        >
+          🔵 BLUE ENVIRONMENT
+        </Badge>
+
         <h1>DeployFlow</h1>
+
         <p>
-          An internal engineering demo application with clean React and Express architecture, prepared for future
-          deployment milestones without adding infrastructure tooling yet.
+          An internal engineering demo application with clean React and Express
+          architecture, prepared for future deployment milestones without
+          adding infrastructure tooling yet.
         </p>
+
         <div className="hero-actions">
-          <Button as="a" href="/#products">
+          <Button as="a" href="#products">
             View Demo Components
           </Button>
-          <Button as="a" href="/#system-status" variant="secondary">
+
+          <Button
+            as="a"
+            href="#system-status"
+            variant="secondary"
+          >
             Check System Status
           </Button>
         </div>
       </div>
+
       <div className="hero-panel">
         <div className="hero-panel-item">
           <span className="stat-label">Stack</span>
           <strong>React 19 + Vite + Express</strong>
         </div>
+
         <div className="hero-panel-item">
           <span className="stat-label">Data Source</span>
           <strong>Local API data service</strong>
         </div>
+
         <div className="hero-panel-item">
           <span className="stat-label">Prepared For</span>
           <strong>Future DevOps milestones</strong>
@@ -60,4 +63,4 @@ function Hero() {
   );
 }
 
-export default Hero;
+export default HeroBlue;

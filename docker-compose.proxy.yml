@@ -1,0 +1,20 @@
+
+
+services:
+  proxy:
+    build:
+      context: ./proxy
+    image: deployflow-proxy
+    container_name: deployflow-proxy
+
+    ports:
+      - "80:80"
+
+    restart: unless-stopped
+
+    networks:
+      - deployflow-network
+
+networks:
+  deployflow-network:
+    external: true

@@ -1,0 +1,27 @@
+services:
+
+  backend-blue:
+    image: adithiya123/deployflow-backend:latest
+    container_name: backend-blue
+
+    networks:
+      - deployflow-network
+
+  frontend-blue:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.blue
+
+    image: deployflow-frontend-blue
+
+    container_name: frontend-blue
+
+    depends_on:
+      - backend-blue
+
+    networks:
+      - deployflow-network
+
+networks:
+  deployflow-network:
+    external: true

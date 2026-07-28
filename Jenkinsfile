@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    environment {
+        ACTIVE = ""
+        TARGET = ""
+    }
+
     stages {
 
         stage('Build Docker Images') {
@@ -32,31 +37,78 @@ pipeline {
             }
         }
 
-        stage('Deploy Containers') {
+        stage('Detect Active Environment') {
             steps {
-                echo 'Stopping old containers...'
-                sh 'docker compose down || true'
+                script {
+                    env.ACTIVE = sh(
+                        script: './detect-active.sh',
+                        returnStdout: true
+                    ).trim()
 
-                echo 'Deploying application...'
-                sh 'docker compose up -d'
+                    echo "Current Active Environment: ${env.ACTIVE}"
+                }
+            }
+        }
+
+        stage('Deploy Inactive Environment') {
+            steps {
+                script {
+
+                    if (env.ACTIVE == "blue") {
+
+                        echo "Blue is active. Deploying Green..."
+
+                        sh './deploy-green.sh'
+
+                        env.TARGET = "green"
+
+                    } else {
+
+                        echo "Green is active. Deploying Blue..."
+
+                        sh './deploy-blue.sh'
+
+                        env.TARGET = "blue"
+
+                    }
+                }
+            }
+        }
+
+        stage('Switch Traffic') {
+            steps {
+                script {
+
+                    echo "Switching traffic to ${env.TARGET}"
+
+                    sh "./switch.sh ${env.TARGET}"
+
+                }
             }
         }
 
         stage('Verify Deployment') {
             steps {
-                echo 'Checking running containers...'
+                echo 'Deployment Status'
                 sh 'docker ps'
             }
         }
     }
 
     post {
+
         success {
-            echo 'Deployment Successful!'
+            echo "======================================"
+            echo "Blue-Green Deployment Successful!"
+            echo "Current Live Environment: ${env.TARGET}"
+            echo "======================================"
         }
 
         failure {
-            echo 'Deployment Failed!'
+            echo "======================================"
+            echo "Deployment Failed!"
+            echo "Traffic was NOT switched."
+            echo "======================================"
         }
     }
 }
