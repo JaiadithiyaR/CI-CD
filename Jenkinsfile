@@ -19,10 +19,13 @@ pipeline {
 
         stage('Deploy Containers') {
             steps {
+                echo 'Stopping old containers...'
+                sh 'docker compose down || true'
+
                 echo 'Deploying application...'
                 sh 'docker compose up -d'
-            }
-        }
+         }
+}
 
         stage('Verify Deployment') {
             steps {
