@@ -3,12 +3,7 @@ pipeline {
 
     stages {
 
-        stage('Checkout') {
-            steps {
-                echo 'Checking out source code...'
-                checkout scm
-            }
-        }
+        
 
         stage('Build Docker Images') {
             steps {
@@ -21,11 +16,10 @@ pipeline {
             steps {
                 echo 'Stopping old containers...'
                 sh 'docker compose down || true'
-
                 echo 'Deploying application...'
                 sh 'docker compose up -d'
-         }
-}
+            }
+        }
 
         stage('Verify Deployment') {
             steps {
