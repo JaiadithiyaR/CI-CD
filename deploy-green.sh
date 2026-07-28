@@ -4,7 +4,8 @@ set -e
 
 echo "Deploying GREEN environment..."
 
-docker compose -f docker-compose.green.yml down || true
+docker rm -f backend-green frontend-green 2>/dev/null || true
+
 docker compose -f docker-compose.green.yml up -d --build
 
 echo "Waiting for frontend-green to become healthy..."
