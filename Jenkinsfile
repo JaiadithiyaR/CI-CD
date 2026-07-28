@@ -49,15 +49,20 @@ pipeline {
 
         stage('Detect Active Environment') {
             steps {
-                script {
-                    env.ACTIVE = sh(
-                        script: './detect-active.sh',
-                        returnStdout: true
-                    ).trim()
+                 script {
 
-                    echo "Current Active Environment: ${env.ACTIVE}"
-                }
-            }
+                def output = sh(
+                    script: './detect-active.sh',
+                    returnStdout: true
+                ).trim()
+
+                 echo "OUTPUT = '${output}'"
+
+                 env.ACTIVE = output
+
+                echo "ACTIVE = '${env.ACTIVE}'"
+                  }
+             }
         }
 
         stage('Deploy Inactive Environment') {
