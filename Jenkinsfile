@@ -1,8 +1,9 @@
+def ACTIVE = ""
+
 pipeline {
     agent any
 
     environment {
-        ACTIVE = ""
         TARGET = ""
     }
 
@@ -36,53 +37,46 @@ pipeline {
                 }
             }
         }
+
         stage('Grant Execute Permission') {
             steps {
-                 sh '''
-                chmod +x detect-active.sh
-                chmod +x deploy-blue.sh
-                chmod +x deploy-green.sh
-                chmod +x switch.sh
-        '''
-              }
+                sh '''
+                    chmod +x detect-active.sh
+                    chmod +x deploy-blue.sh
+                    chmod +x deploy-green.sh
+                    chmod +x switch.sh
+                '''
+            }
         }
 
         stage('Detect Active Environment') {
             steps {
-                 script {
+                script {
 
-                def output = sh(
-                    script: './detect-active.sh',
-                    returnStdout: true
-                ).trim()
+                    ACTIVE = sh(
+                        script: './detect-active.sh',
+                        returnStdout: true
+                    ).trim()
 
-                 echo "OUTPUT = '${output}'"
-
-                 env.ACTIVE = output
-
-                echo "ACTIVE = '${env.ACTIVE}'"
-                  }
-             }
+                    echo "Detected Active Environment: ${ACTIVE}"
+                }
+            }
         }
 
         stage('Deploy Inactive Environment') {
             steps {
                 script {
 
-                    if (env.ACTIVE == "blue") {
+                    if (ACTIVE == "blue") {
 
                         echo "Blue is active. Deploying Green..."
-
                         sh './deploy-green.sh'
-
                         env.TARGET = "green"
 
                     } else {
 
                         echo "Green is active. Deploying Blue..."
-
                         sh './deploy-blue.sh'
-
                         env.TARGET = "blue"
 
                     }
@@ -95,7 +89,6 @@ pipeline {
                 script {
 
                     echo "Switching traffic to ${env.TARGET}"
-
                     sh "./switch.sh ${env.TARGET}"
 
                 }
