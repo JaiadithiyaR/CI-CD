@@ -190,7 +190,7 @@ Returns a standard success envelope confirming that the API is running.
 }
 ```
 
-## Set up
+##Installation
 
 Install dependencies separately for each app.
 
