@@ -1,0 +1,27 @@
+services:
+
+  backend-green:
+    image: adithiya123/deployflow-backend:latest
+    container_name: backend-green
+
+    networks:
+      - deployflow-network
+
+  frontend-green:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.green
+
+    image: deployflow-frontend-green
+
+    container_name: frontend-green
+
+    depends_on:
+      - backend-green
+
+    networks:
+      - deployflow-network
+
+networks:
+  deployflow-network:
+    external: true
