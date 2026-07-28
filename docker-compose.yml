@@ -1,5 +1,6 @@
 services:
   backend:
+    image: adithiya123/deployflow-backend:latest
     build:
       context: ./backend
     container_name: deployflow-backend
@@ -8,6 +9,7 @@ services:
     restart: unless-stopped
 
   frontend:
+    image: adithiya123/deployflow-frontend:latest
     build:
       context: ./frontend
       dockerfile: Dockerfile
