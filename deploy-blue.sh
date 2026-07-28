@@ -1,7 +1,10 @@
 #!/bin/bash
 
+set -e
+
 echo "Deploying BLUE environment..."
 
+docker compose -f docker-compose.blue.yml down || true
 docker compose -f docker-compose.blue.yml up -d --build
 
 echo "Waiting for frontend-blue to become healthy..."

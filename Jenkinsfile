@@ -69,17 +69,21 @@ pipeline {
 
                     if (ACTIVE == "blue") {
 
-                        echo "Blue is active. Deploying Green..."
-                        sh './deploy-green.sh'
-                        env.TARGET = "green"
+    echo "Blue is active. Deploying Green..."
 
-                    } else {
+    env.TARGET = "green"
 
-                        echo "Green is active. Deploying Blue..."
-                        sh './deploy-blue.sh'
-                        env.TARGET = "blue"
+    sh './deploy-green.sh'
 
-                    }
+} else {
+
+    echo "Green is active. Deploying Blue..."
+
+    env.TARGET = "blue"
+
+    sh './deploy-blue.sh'
+
+}
                 }
             }
         }
