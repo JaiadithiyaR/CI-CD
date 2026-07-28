@@ -1,11 +1,10 @@
 def ACTIVE = ""
+def TARGET = ""
 
 pipeline {
     agent any
 
-    environment {
-        TARGET = ""
-    }
+    
 
     stages {
 
@@ -71,7 +70,7 @@ pipeline {
 
     echo "Blue is active. Deploying Green..."
 
-    env.TARGET = "green"
+    TARGET = "green"
 
     sh './deploy-green.sh'
 
@@ -79,7 +78,7 @@ pipeline {
 
     echo "Green is active. Deploying Blue..."
 
-    env.TARGET = "blue"
+    TARGET = "blue"
 
     sh './deploy-blue.sh'
 
@@ -92,8 +91,9 @@ pipeline {
             steps {
                 script {
 
-                    echo "Switching traffic to ${env.TARGET}"
-                    sh "./switch.sh ${env.TARGET}"
+                   echo "Switching traffic to ${TARGET}"
+
+                    sh "./switch.sh ${TARGET}"
 
                 }
             }
@@ -112,7 +112,7 @@ pipeline {
         success {
             echo "======================================"
             echo "Blue-Green Deployment Successful!"
-            echo "Current Live Environment: ${env.TARGET}"
+             echo "Current Live Environment: ${TARGET}"
             echo "======================================"
         }
 
