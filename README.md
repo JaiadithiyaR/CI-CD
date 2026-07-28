@@ -1,262 +1,350 @@
-# DeployFlow
+# DeployFlow – Automated Blue-Green CI/CD Pipeline on AWS using Jenkins, Docker & Nginx
 
-DeployFlow is a local-only React and Express application that serves as the foundation for a future DevOps showcase. This milestone focuses on clean architecture, maintainability, modularity, and production-minded code quality without introducing Docker, Jenkins, AWS, Nginx, or CI/CD yet.
+DeployFlow is a production-inspired CI/CD pipeline that automates application deployment using the Blue-Green Deployment strategy. The project integrates Jenkins, Docker, Docker Compose, GitHub Webhooks, Docker Hub, Nginx Reverse Proxy, and AWS EC2 to achieve automated deployments with minimal downtime. The pipeline builds and publishes Docker images, deploys the inactive environment, performs health checks, switches traffic seamlessly, and verifies successful deployment.
 
-## Why This Project Exists
-
-DeployFlow is meant to demonstrate how a small local application can be structured like an internal engineering tool before it becomes a deployment pipeline showcase. The project intentionally keeps the domain simple so future milestones can focus on delivery automation, rollout strategy, and operational reliability rather than application complexity.
-
-## Project Overview
-
-The application is split into two independently running parts:
-
-- `frontend/` is a React 19 application built with Vite.
-- `backend/` is an Express API that serves product, health, and version data from local files.
-
-The current milestone keeps sample components in JSON, uses local bundled images, and exposes small API contracts that are ready for future deployment automation.
-
-## Architecture
-
-The codebase is organized around a service-first backend and hook-driven frontend.
-
-```text
-Browser
-  |
-  v
-React pages -> reusable UI components -> custom hooks -> API services -> Express routes -> controllers -> services -> JSON data
-  ^                                                                                |
-  |--------------------------------------------------------------------------------|
-```
-
-- Controllers only translate requests and responses.
-- Services contain business logic and data access.
-- Middleware handles logging, 404 responses, and error formatting.
-- Frontend data fetching lives in custom hooks instead of UI components.
-- Shared API clients are isolated in the services layer.
-
-## Folder Structure
-
-```text
-deployflow/
-  backend/
-    config/
-      serverConfig.js
-    controllers/
-      metaController.js
-      productController.js
-    data/
-      products.json
-    middleware/
-      errorHandler.js
-      logger.js
-      notFound.js
-    routes/
-      metaRoutes.js
-      productRoutes.js
-    services/
-      productService.js
-      systemService.js
-    utils/
-      fileUtils.js
-    .env
-    package.json
-    server.js
-  frontend/
-    src/
-      assets/
-        images/
-      components/
-      context/
-      hooks/
-      pages/
-      services/
-      styles/
-      App.jsx
-      main.jsx
-    .env
-    index.html
-    package.json
-    vite.config.js
-  README.md
-```
+---
 
 ## Features
 
-- Professional navigation with dynamic version badge
-- Responsive hero section
-- Live backend status card with refresh timestamps
-- Version information card
-- Demo components grid with local images
-- Reusable loading skeletons
-- Reusable error states
-- 404 fallback route
-- Centralized API clients and hooks
-- Clean backend logging and error handling
-- Standardized JSON response envelopes
-- Local-only environment configuration
+- Automated CI/CD pipeline using Jenkins
+- GitHub Webhook integration for automatic pipeline triggering
+- Automated Docker image build and deployment
+- Docker Hub image publishing
+- Blue-Green deployment strategy
+- Zero-downtime application deployment
+- Automated health checks before production switch
+- Dynamic traffic switching using Nginx Reverse Proxy
+- Deployment on AWS EC2
+- Easy rollback by switching traffic to the previous environment
+- Production-inspired deployment workflow
 
-## Screenshots Placeholder
-
-Add screenshots here in a future milestone once the UI stabilizes across desktop, tablet, and mobile breakpoints.
+---
 
 ## Tech Stack
 
-- React 19
-- Vite
-- React Router
-- Axios
-- Express
-- dotenv
-- Node.js
+| Category | Technology |
+|----------|------------|
+| Cloud Platform | AWS EC2 |
+| CI/CD | Jenkins |
+| Version Control | Git, GitHub |
+| Containerization | Docker |
+| Container Orchestration | Docker Compose |
+| Image Registry | Docker Hub |
+| Reverse Proxy | Nginx |
+| Frontend | React |
+| Backend | Node.js, Express.js |
+| Operating System | Ubuntu Server |
+| Scripting | Bash |
 
-## API Documentation
+---
 
-### `GET /api/products`
+# System Architecture
 
-Returns demo component data from `backend/data/products.json`.
-
-Example response:
-
-```json
-{
-  "success": true,
-  "data": [
-    {
-      "id": 1,
-      "name": "Laptop Pro 14",
-      "category": "Electronics",
-      "price": 1200,
-      "description": "High performance laptop for productivity, development, and on-the-go collaboration.",
-      "image": "laptop.svg",
-      "rating": 4.8,
-      "stock": "In Stock"
-    }
-  ],
-  "message": "Demo components retrieved successfully"
-}
+```
+                     GitHub Repository
+                            │
+                     GitHub Webhook
+                            │
+                            ▼
+                     Jenkins Pipeline
+                            │
+          ┌─────────────────┴─────────────────┐
+          │                                   │
+          ▼                                   ▼
+ Build Docker Images               Push Images to Docker Hub
+          │
+          ▼
+ Detect Active Environment
+          │
+          ▼
+ Deploy to Inactive Environment
+          │
+          ▼
+     Health Check
+          │
+          ▼
+ Switch Traffic (Nginx)
+          │
+          ▼
+ Verify Deployment
+          │
+          ▼
+         Users
 ```
 
-### `GET /api/version`
+---
 
-Returns build metadata for the application.
+# Blue-Green Deployment Workflow
 
-```json
-{
-  "success": true,
-  "data": {
-    "application": "DeployFlow",
-    "version": "1.0.0",
-    "build": "local-dev",
-    "commit": "development",
-    "environment": "development"
-  },
-  "message": "Version retrieved successfully"
-}
+### Step 1 – Current Production
+
+```
+Users
+   │
+   ▼
+ Nginx
+   │
+   ▼
+Green Environment
 ```
 
-### `GET /api/health`
+### Step 2 – Deploy New Version
 
-Returns the current backend health payload.
+```
+Users
 
-```json
-{
-  "success": true,
-  "data": {
-    "application": "DeployFlow",
-    "status": "UP",
-    "environment": "development",
-    "version": "1.0.0",
-    "build": "local-dev",
-    "node": "v22.x",
-    "uptime": "153 seconds",
-    "timestamp": "2026-07-27T00:00:00.000Z"
-  },
-  "message": "Health retrieved successfully"
-}
+Green Environment (Live)
+
+Blue Environment (Deploying)
 ```
 
-### `GET /`
+### Step 3 – Health Check
 
-Returns a standard success envelope confirming that the API is running.
+```
+Health Check
 
-```json
-{
-  "success": true,
-  "data": {
-    "application": "DeployFlow",
-    "environment": "development"
-  },
-  "message": "DeployFlow API is running"
-}
+Blue Environment
+
+Healthy?
+     │
+     ├── Yes
+     ▼
+Switch Traffic
+
+     └── No
+          ▼
+Keep Green Live
 ```
 
-##Setup
+### Step 4 – Switch Traffic
 
-Install dependencies separately for each app.
+```
+Users
+   │
+   ▼
+ Nginx
+   │
+   ▼
+Blue Environment
+```
+
+The previous environment remains available until the new deployment is verified, ensuring minimal downtime and safer releases.
+
+---
+
+# Project Structure
+
+```
+CI-CD/
+│
+├── backend/
+│
+├── frontend/
+│
+├── proxy/
+│   └── active_backend.conf
+│
+├── Jenkinsfile
+│
+├── docker-compose.yml
+├── docker-compose.blue.yml
+├── docker-compose.green.yml
+│
+├── detect-active.sh
+├── deploy-blue.sh
+├── deploy-green.sh
+├── switch.sh
+│
+└── README.md
+```
+
+---
+
+# CI/CD Pipeline Workflow
+
+The Jenkins pipeline performs the following stages automatically whenever new code is pushed to GitHub.
+
+1. Clone the latest source code from GitHub
+2. Build frontend and backend Docker images
+3. Push Docker images to Docker Hub
+4. Detect the currently active environment
+5. Deploy the latest version to the inactive environment
+6. Wait until the deployed application becomes healthy
+7. Switch Nginx traffic to the newly deployed environment
+8. Verify successful deployment
+
+---
+
+# AWS Deployment
+
+The application is deployed on an Ubuntu-based AWS EC2 instance where Jenkins manages the complete CI/CD workflow.
+
+The deployment process includes:
+
+- GitHub Webhook triggers Jenkins automatically
+- Jenkins builds Docker images
+- Images are pushed to Docker Hub
+- Jenkins detects the currently active environment
+- The inactive environment is deployed
+- Health checks validate the deployment
+- Nginx switches traffic to the healthy environment
+- Deployment verification completes the pipeline
+
+### AWS Environment
+
+- Cloud Platform : AWS EC2
+- Operating System : Ubuntu Server
+- CI/CD Tool : Jenkins
+- Containerization : Docker
+- Orchestration : Docker Compose
+- Reverse Proxy : Nginx
+- Image Registry : Docker Hub
+- Deployment Strategy : Blue-Green Deployment
+
+---
+
+# Getting Started
+
+## Clone Repository
 
 ```bash
-cd deployflow/backend
-npm install
+git clone https://github.com/JaiadithiyaR/CI-CD.git
 
-cd ../frontend
-npm install
+cd CI-CD
 ```
 
-## Run Locally
+---
 
-Create or update the local environment files if needed:
+## Create Docker Network
 
 ```bash
-backend/.env
-PORT=5000
-
-frontend/.env
-VITE_API_URL=http://localhost:5000/api
+docker network create deployflow-network
 ```
 
-Start the backend in one terminal:
+---
+
+## Build Docker Images
 
 ```bash
-cd deployflow/backend
-npm run dev
+docker compose build
 ```
 
-Start the frontend in another terminal:
+---
+
+## Start Jenkins
+
+Open Jenkins in your browser.
+
+```
+http://<EC2-PUBLIC-IP>:8080
+```
+
+Configure:
+
+- GitHub Repository
+- Docker Hub Credentials
+- GitHub Webhook
+
+---
+
+## Trigger Deployment
+
+Push code to GitHub.
 
 ```bash
-cd deployflow/frontend
-npm run dev
+git add .
+
+git commit -m "Updated application"
+
+git push origin main
 ```
 
-Open the frontend URL printed by Vite. The frontend will call the backend API at the URL defined in `frontend/.env`.
+The Jenkins pipeline automatically:
 
-## Deployment Plan
+- Builds Docker images
+- Pushes images to Docker Hub
+- Deploys the inactive environment
+- Performs health checks
+- Switches production traffic
+- Verifies deployment
 
-This milestone is intentionally local only. The future delivery path will be introduced in separate milestones and is expected to evolve in this order:
+---
 
-1. Docker the frontend and backend applications.
-2. Add Docker Compose for local orchestration.
-3. Introduce Jenkins for repeatable build and rollout automation.
-4. Connect GitHub Webhooks to trigger delivery workflows.
-5. Deploy to AWS EC2.
-6. Add Nginx in front of the applications.
-7. Implement blue-green deployment with health checks and automatic rollback.
+# Docker Hub Images
 
-## Future Milestones
+The pipeline automatically publishes:
 
-The next phases of DeployFlow will introduce:
+- deployflow-backend
+- deployflow-frontend
 
-- Docker
-- Docker Compose
-- AWS EC2
-- Jenkins
-- GitHub Webhooks
+---
+
+# Deployment Scripts
+
+| Script | Purpose |
+|---------|---------|
+| detect-active.sh | Detects the currently active environment |
+| deploy-blue.sh | Deploys the Blue environment |
+| deploy-green.sh | Deploys the Green environment |
+| switch.sh | Switches Nginx traffic between Blue and Green |
+
+---
+
+# Pipeline Benefits
+
+- Continuous Integration
+- Continuous Delivery
+- Automated Build Process
+- Automated Deployment
 - Blue-Green Deployment
-- Health Checks
-- Automatic Rollback
+- Near Zero Downtime
+- Automated Health Checks
+- Faster Release Cycle
+- Easier Rollback
+- Production-Ready Deployment Workflow
 
-## Notes
+---
 
-- The project intentionally remains local-only in this milestone.
-- No authentication, database, Docker, Jenkins, AWS, or Nginx have been added yet.
-- The current structure is designed to support future deployment and rollback workflows with minimal rework.
+# Screenshots
+
+Add screenshots of:
+
+- Jenkins Dashboard
+- Successful Jenkins Pipeline
+- Docker Containers
+- Docker Hub Repository
+- AWS EC2 Instance
+- GitHub Webhook
+- Blue-Green Deployment
+- Running Application
+- Nginx Reverse Proxy
+
+---
+
+# Future Enhancements
+
+- Automatic Rollback on Failed Health Check
+- Kubernetes Deployment
+- AWS ECS Deployment
+- Prometheus Monitoring
+- Grafana Dashboard
+- HTTPS using Let's Encrypt
+- Terraform Infrastructure as Code
+- GitHub Actions Pipeline
+- Multi-Environment Deployment (Development, Staging, Production)
+
+---
+
+# Author
+
+**Jai Adithiya R**
+
+B.E. Computer Science and Engineering
+
+Interested in DevOps, Cloud Computing, AWS, CI/CD, Docker, Kubernetes, and Full Stack Development.
+
+---
+
+# License
+
+This project is licensed for educational and portfolio purposes.
